@@ -1,6 +1,13 @@
 # NoPara - Secure Media Conversion Application
 
-Production-grade, serverless, browser-based media conversion platform with enterprise-grade security and accessibility.
+🔗 **Live Demo**: [https://jesunahmadushno.github.io/NoPara/](https://jesunahmadushno.github.io/NoPara/)
+
+Production-grade, serverless, browser-based media conversion platform with enterprise-grade security and accessibility. Powered by **FFmpeg.wasm** for real client-side media processing.
+
+![NoPara](https://img.shields.io/badge/NoPara-Media%20Converter-6366f1?style=for-the-badge)
+![FFmpeg](https://img.shields.io/badge/FFmpeg-WASM-007808?style=for-the-badge)
+![React](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge)
+![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?style=for-the-badge)
 
 ## 🔐 Security & Compliance
 
@@ -108,27 +115,32 @@ npm run build
 
 ## 🎯 Core Features
 
-### 1. Media Conversion
-Supported formats with zero-trust validation:
-- **Video**: MP4, MKV, AVI, WebM
-- **Audio**: MP3, WAV, FLAC, AAC
-- **Image**: GIF, WebP, PNG, JPEG, BMP
+### 1. Real Media Conversion (FFmpeg.wasm)
+Actual client-side media conversion using FFmpeg compiled to WebAssembly:
+- **Video**: MP4, WebM, MKV, AVI, MOV, FLV, WMV, MPEG, OGG
+- **Audio**: MP3, WAV, FLAC, AAC, OGG, WMA, M4A, OPUS
+- **Image**: GIF (animated), WebP, PNG, JPEG, BMP, TIFF
 
-### 2. File Validation (Security)
+### 2. Modern Glassmorphism UI
+- Beautiful gradient backgrounds with animated effects
+- Glassmorphism cards with frosted glass appearance
+- Smooth animations and micro-interactions
+- Floating action button for Security & Privacy info
+- Responsive design for all screen sizes
+
+### 3. File Validation (Security)
 - Magic number verification (binary signatures)
 - MIME type validation
 - File size limits (prevents DoS)
 - Sanitized file names (prevents path traversal)
 - Secure error messages (no stack traces)
 
-### 3. Conversion Settings
-- Quality Level (CRF: 18-28)
-- Compression Preset (fast, medium, slow)
-- Green Coding: Lower settings = less energy
-
-### 4. Editing Tools (Optional)
-- ✂️ Trim Video - Reduce file size before conversion
-- 🔍 Crop Video - Remove unnecessary content
+### 4. Conversion Settings
+- Quality Level (Low/Medium/High/Very High/Lossless)
+- Bitrate Control (Audio: 128k-320k, Video: 1M-50M)
+- Resolution Options (Original, 480p, 720p, 1080p, 4K)
+- Frame Rate Control (Original, 24, 30, 60 fps)
+- Audio Sample Rate (44.1kHz, 48kHz, 96kHz)
 
 ### 5. Offline Capability (PWA)
 - Cache-first strategy for static assets
@@ -156,10 +168,18 @@ Key settings:
 
 ## 🌍 Deployment
 
-### GitHub Pages
-1. Build the project: `npm run build`
-2. Push `dist/` folder to `gh-pages` branch
-3. Enable GitHub Pages in repository settings
+### GitHub Pages (Live)
+The app is deployed at: **https://jesunahmadushno.github.io/NoPara/**
+
+To deploy your own:
+```bash
+# Build and deploy in one command
+npm run deploy
+```
+
+This runs `npm run build && gh-pages -d dist --dotfiles` which:
+1. Builds the production bundle
+2. Deploys to the `gh-pages` branch automatically
 
 ### Security Headers for GitHub Pages
 The `coi-serviceworker.js` injects COOP/COEP headers since GitHub Pages doesn't allow direct header configuration.
@@ -233,13 +253,19 @@ System font stack for optimal performance:
 ## 🚧 Future Enhancements
 
 ### Planned Features
-- [ ] FFmpeg WASM integration (actual media processing)
-- [ ] Advanced video editing (timeline scrubbing)
-- [ ] Batch processing
+- [ ] Advanced video editing (timeline scrubbing, trim, crop)
+- [ ] Batch processing for multiple files
 - [ ] Hardware acceleration (WebGL rendering)
 - [ ] Cloud storage integration (with encryption)
 - [ ] Internationalization (i18n)
-- [ ] Dark mode toggle
+- [ ] Dark/Light mode toggle
+
+### Completed ✅
+- [x] FFmpeg WASM integration (actual media processing)
+- [x] Modern glassmorphism UI with animations
+- [x] Floating info button with modal
+- [x] Real-time conversion progress
+- [x] GitHub Pages deployment
 
 ### Accessibility Roadmap
 - [ ] Real-time captions
@@ -307,7 +333,8 @@ Contributions are welcome! Please ensure:
 
 ---
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Last Updated**: January 24, 2026  
-**Architecture**: Serverless, Client-Side Only (React + Vite)  
-**Security**: Zero-Trust, GDPR Compliant, No Data Persistence
+**Architecture**: Serverless, Client-Side Only (React + Vite + FFmpeg.wasm)  
+**Security**: Zero-Trust, GDPR Compliant, No Data Persistence  
+**Repository**: [github.com/JesunAhmadUshno/NoPara](https://github.com/JesunAhmadUshno/NoPara)
