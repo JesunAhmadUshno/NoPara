@@ -1,13 +1,48 @@
 # NoPara - Secure Media Conversion Application
 
-🔗 **Live Demo**: [https://jesunahmadushno.github.io/NoPara/](https://jesunahmadushno.github.io/NoPara/)
+<p align="center">
+  <img src="logo.png" alt="NoPara Logo" width="150" />
+</p>
+
+<p align="center">
+  <strong>🔗 Live Demo: <a href="https://jesunahmadushno.github.io/NoPara/">https://jesunahmadushno.github.io/NoPara/</a></strong>
+</p>
+
+<p align="center">
+  <a href="https://buymeacoffee.com/jesun">☕ Buy Me a Coffee</a> •
+  <a href="https://jesunahmadushno.com">👨‍💻 Developer</a>
+</p>
 
 Production-grade, serverless, browser-based media conversion platform with enterprise-grade security and accessibility. Powered by **FFmpeg.wasm** for real client-side media processing.
 
-![NoPara](https://img.shields.io/badge/NoPara-Media%20Converter-6366f1?style=for-the-badge)
+![NoPara](https://img.shields.io/badge/NoPara-Media%20Converter-ff00ff?style=for-the-badge)
 ![FFmpeg](https://img.shields.io/badge/FFmpeg-WASM-007808?style=for-the-badge)
 ![React](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge)
 ![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?style=for-the-badge)
+![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local-39ff14?style=for-the-badge)
+
+## ✨ Features
+
+### 🎨 Graffiti Neon UI
+- Stunning neon color palette (Cyan, Magenta, Purple, Green, Orange)
+- Animated gradients and glow effects
+- Glassmorphism cards with frosted glass appearance
+- **Panic Bootloader** - Animated loading screen with scrambling logo
+- Responsive design for all screen sizes
+
+### 🔄 Real Media Conversion
+- **Video**: MP4, WebM, MKV, AVI
+- **Audio**: MP3, WAV, FLAC, AAC
+- **Image**: GIF (high quality), WebP, PNG, JPEG
+- Adjustable quality settings (CRF, presets)
+- Real-time conversion progress
+
+### 🔒 100% Private
+- **All processing happens in YOUR browser**
+- Files NEVER leave your device
+- No uploads, no servers, no tracking
+- Zero cookies, zero analytics
+- GDPR & PIPEDA compliant
 
 ## 🔐 Security & Compliance
 
@@ -232,9 +267,12 @@ Strict CSP in `index.html`:
 Edit CSS variables in `public/styles/globals.css`:
 ```css
 :root {
-  --color-primary: #1a1a1a;
-  --color-secondary: #2c3e50;
-  --color-success: #1b5e20;
+  /* Graffiti Neon Color Palette */
+  --primary: #00e5ff;        /* Cyan */
+  --secondary: #ff00ff;      /* Magenta */
+  --accent: #39ff14;         /* Green */
+  --purple: #9d4edd;         /* Purple */
+  --orange: #ff6d00;         /* Orange */
   /* ... more colors */
 }
 ```
@@ -266,6 +304,11 @@ System font stack for optimal performance:
 - [x] Floating info button with modal
 - [x] Real-time conversion progress
 - [x] GitHub Pages deployment
+- [x] Graffiti neon theme with custom skull logo
+- [x] Panic bootloader with animated loading screen
+- [x] Buy Me a Coffee floating button
+- [x] Developer footer with link
+- [x] High quality GIF conversion
 
 ### Accessibility Roadmap
 - [ ] Real-time captions
@@ -333,8 +376,10 @@ Contributions are welcome! Please ensure:
 
 ---
 
-**Version**: 1.1.0  
+**Version**: 1.2.0  
 **Last Updated**: January 24, 2026  
 **Architecture**: Serverless, Client-Side Only (React + Vite + FFmpeg.wasm)  
 **Security**: Zero-Trust, GDPR Compliant, No Data Persistence  
-**Repository**: [github.com/JesunAhmadUshno/NoPara](https://github.com/JesunAhmadUshno/NoPara)
+**Developer**: [Jesun Ahmad Ushno](https://jesunahmadushno.com)  
+**Repository**: [github.com/JesunAhmadUshno/NoPara](https://github.com/JesunAhmadUshno/NoPara)  
+**Support**: [Buy Me a Coffee](https://buymeacoffee.com/jesun)
