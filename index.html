@@ -102,7 +102,7 @@
           console.info('[Security] Cross-Origin Isolation enabled (COOP/COEP headers detected)');
         } else if (navigator.serviceWorker) {
           // Fallback: Load COI workaround via service worker
-          navigator.serviceWorker.register('/NoPara/coi-serviceworker.js').catch(() => {
+          navigator.serviceWorker.register('./coi-serviceworker.js').catch(() => {
             console.warn('[Warning] COI workaround unavailable - SharedArrayBuffer may not function');
           });
         }
@@ -113,9 +113,9 @@
          No External Frameworks
          Pure CSS + Semantic HTML for minimal carbon footprint
          ======================================== -->
-    <link rel="stylesheet" href="/NoPara/styles/globals.css" />
-    <link rel="stylesheet" href="/NoPara/styles/accessibility.css" />
-    <link rel="stylesheet" href="/NoPara/styles/components.css" />
+    <link rel="stylesheet" href="/styles/globals.css" />
+    <link rel="stylesheet" href="/styles/accessibility.css" />
+    <link rel="stylesheet" href="/styles/components.css" />
 
     <title>NoPara - Secure Media Conversion</title>
   </head>
@@ -136,7 +136,7 @@
          No External Scripts (OWASP CSP)
          Only inline trusted code and bundled React app
          ======================================== -->
-    <script type="module" src="/NoPara/src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx"></script>
 
     <!-- ========================================
          Performance Monitoring (Green Coding)

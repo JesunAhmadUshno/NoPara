@@ -79,8 +79,6 @@ export default defineConfig({
         manualChunks: {
           // Separate vendor chunks to leverage browser cache (LCP optimization)
           react: ['react', 'react-dom'],
-          // WASM-specific code in separate chunk
-          wasm: ['../src/utils/wasm-loader.js'],
         },
       },
     },

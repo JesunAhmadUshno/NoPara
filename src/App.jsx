@@ -582,7 +582,7 @@ function SecurityStatus() {
             <span className="status-badge">✓</span> Content Security Policy (CSP) Enabled
           </li>
           <li>
-            <span className="status-badge" className={securityStatus.features.crossOriginIsolated ? '✓' : '✗'}>
+            <span className={`status-badge ${securityStatus.features.crossOriginIsolated ? 'active' : 'inactive'}`}>
               {securityStatus.features.crossOriginIsolated ? '✓' : '✗'}
             </span>
             Cross-Origin Isolation (WASM Support)
