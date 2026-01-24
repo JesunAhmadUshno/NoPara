@@ -1,0 +1,101 @@
+{
+  "name": "NoPara - Free Online Video Converter | MP4 to GIF, MP3, WebM",
+  "short_name": "NoPara",
+  "description": "Free online video converter - Convert MP4 to GIF, WebM, MP3, AVI, MKV instantly in your browser. 100% private, no upload required. Best free media converter 2026.",
+  "scope": "/NoPara/",
+  "start_url": "/NoPara/index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#0a0a0f",
+  "background_color": "#0a0a0f",
+  "categories": ["productivity", "utilities", "multimedia"],
+  "keywords": "video converter, mp4 to gif, online converter, free converter, media converter, mp4 to mp3, webm converter",
+  "lang": "en-US",
+  "dir": "ltr",
+
+  "icons": [
+    {
+      "src": "/NoPara/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/NoPara/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/NoPara/icons/icon-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/NoPara/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "/NoPara/screenshots/screenshot-540x720.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/NoPara/screenshots/screenshot-1280x720.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Convert Media",
+      "short_name": "Convert",
+      "description": "Launch media conversion interface",
+      "url": "/NoPara/index.html?action=convert",
+      "icons": [
+        {
+          "src": "/NoPara/icons/shortcut-icon.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+
+  "share_target": {
+    "action": "/NoPara/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "media",
+          "accept": ["video/*", "audio/*", "image/*"]
+        }
+      ]
+    }
+  },
+
+  "prefer_related_applications": false,
+
+  "screenshots_high_res": [
+    {
+      "src": "/NoPara/screenshots/screenshot-high-res.png",
+      "sizes": "3840x2160",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

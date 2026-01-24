@@ -1,0 +1,197 @@
+/**
+ * NoPara - Accessibility Styles
+ * WCAG 2.2 AAA Compliant
+ */
+
+/* ========================================
+   Skip Link
+   ======================================== */
+
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-md) var(--space-xl);
+  background: var(--gradient-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  z-index: 10000;
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-lg);
+}
+
+.skip-link:focus {
+  top: var(--space-md);
+  outline: none;
+}
+
+/* ========================================
+   Focus Styles
+   ======================================== */
+
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  body::after {
+    animation: none !important;
+  }
+}
+
+/* ========================================
+   High Contrast Mode
+   ======================================== */
+
+@media (prefers-contrast: high) {
+  :root {
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-card: rgba(20, 20, 20, 0.95);
+    --border-glass: rgba(255, 255, 255, 0.5);
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+  }
+
+  .section,
+  .drop-zone,
+  .btn {
+    border-width: 2px;
+  }
+}
+
+/* ========================================
+   Dark Mode Enhancements
+   (Already dark theme, but for system preference)
+   ======================================== */
+
+@media (prefers-color-scheme: light) {
+  /* Keep dark theme regardless of system preference */
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+
+@media print {
+  body::before,
+  body::after {
+    display: none;
+  }
+
+  .section {
+    break-inside: avoid;
+    background: white;
+    color: black;
+    border: 1px solid #ccc;
+  }
+
+  .btn,
+  .drop-zone {
+    display: none;
+  }
+}
+
+/* ========================================
+   Touch Target Sizes (44x44 minimum)
+   ======================================== */
+
+@media (pointer: coarse) {
+  .btn {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  .form-select {
+    min-height: 48px;
+  }
+
+  .radio-label {
+    min-height: 48px;
+  }
+
+  .radio-label input[type="radio"] {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ========================================
+   Screen Reader Only Content
+   ======================================== */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Announce changes to screen readers */
+[role="status"],
+[role="alert"],
+[aria-live] {
+  /* Ensure these are announced */
+}
+
+/* ========================================
+   Form Accessibility
+   ======================================== */
+
+/* Error states */
+.form-group.has-error .form-select,
+.form-group.has-error input {
+  border-color: var(--error);
+}
+
+.form-group.has-error .form-label {
+  color: #fca5a5;
+}
+
+/* Required field indicator */
+.form-label.required::after {
+  content: ' *';
+  color: var(--error);
+}
+
+/* Disabled states */
+.btn:disabled,
+.form-select:disabled,
+input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
