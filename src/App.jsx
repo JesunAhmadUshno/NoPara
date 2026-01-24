@@ -316,11 +316,11 @@ export default function App() {
     // Image/GIF conversions - HIGH QUALITY
     if (['gif', 'png', 'jpg', 'webp'].includes(format)) {
       if (format === 'gif') {
-        // High quality GIF: keep original scale, 15fps, use high quality lanczos scaling
-        // split[s0][s1];[s0]palettegen=max_colors=256:stats_mode=full[p];[s1][p]paletteuse=dither=sierra2_4a
+        // High quality GIF: 15fps, lanczos scaling, keep original size
         return [
           ...baseArgs,
-          '-vf', 'fps=15,split[s0][s1];[s0]palettegen=max_colors=256:stats_mode=diff[p];[s1][p]paletteuse=dither=floyd_steinberg',
+          '-vf', 'fps=15,scale=-1:-1:flags=lanczos',
+          '-gifflags', '+transdiff',
           '-loop', '0',
           output
         ];
