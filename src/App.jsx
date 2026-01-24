@@ -21,6 +21,8 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { validateFile, getSecurityStatus, getValidationSchemas } from './utils/security.js';
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
 /**
  * Main Application Root Component
@@ -122,10 +124,53 @@ export default function App() {
   // Conversion Logic (Green Coding + Security)
   // ========================================
 
+  // FFmpeg instance ref
+  const ffmpegRef = useRef(null);
+  const [ffmpegLoaded, setFfmpegLoaded] = useState(false);
+  const [ffmpegLoading, setFfmpegLoading] = useState(false);
+
   /**
-   * Simulate media conversion process
-   * In production: Load ffmpeg.wasm and process via WASM
-   * Green Coding: Process only when necessary, unload WASM memory immediately
+   * Load FFmpeg WASM module
+   * Green Coding: Load only when needed, uses SharedArrayBuffer when available
+   */
+  const loadFFmpeg = async () => {
+    if (ffmpegRef.current && ffmpegLoaded) return true;
+
+    setFfmpegLoading(true);
+    try {
+      const ffmpeg = new FFmpeg();
+      ffmpegRef.current = ffmpeg;
+
+      // Set up progress handler
+      ffmpeg.on('progress', ({ progress }) => {
+        setProgress(Math.round(progress * 100));
+      });
+
+      ffmpeg.on('log', ({ message }) => {
+        console.log('[FFmpeg]', message);
+      });
+
+      // Load FFmpeg core from CDN (with CORS)
+      const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
+      await ffmpeg.load({
+        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+        wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+      });
+
+      setFfmpegLoaded(true);
+      return true;
+    } catch (error) {
+      console.error('FFmpeg load error:', error);
+      setValidationErrors(['Failed to load media processor. Please refresh and try again.']);
+      return false;
+    } finally {
+      setFfmpegLoading(false);
+    }
+  };
+
+  /**
+   * Real media conversion using ffmpeg.wasm
+   * Green Coding: Process only when necessary, clean up memory after
    */
   const handleConvert = async () => {
     if (!selectedFile) {
@@ -136,45 +181,134 @@ export default function App() {
     setIsProcessing(true);
     setProgress(0);
     setProcessedFile(null);
+    setValidationErrors([]);
 
     try {
-      // Simulate conversion progress (WCAG 2.4.8: Status messages)
-      const progressInterval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 95) {
-            clearInterval(progressInterval);
-            return prev;
-          }
-          return prev + Math.random() * 20;
-        });
-      }, 200);
+      // Load FFmpeg if not already loaded
+      announceToScreenReader('Loading media processor...');
+      const loaded = await loadFFmpeg();
+      if (!loaded) {
+        setIsProcessing(false);
+        return;
+      }
 
-      // Simulate processing delay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const ffmpeg = ffmpegRef.current;
 
-      clearInterval(progressInterval);
+      // Get input file extension
+      const inputExt = selectedFile.metadata.name.split('.').pop().toLowerCase();
+      const inputFileName = `input.${inputExt}`;
+      const outputFileName = `output.${conversionFormat}`;
+
+      announceToScreenReader('Processing your file...');
+
+      // Write input file to FFmpeg virtual filesystem
+      await ffmpeg.writeFile(inputFileName, await fetchFile(selectedFile.file));
+
+      // Build FFmpeg command based on conversion type
+      const ffmpegArgs = buildFFmpegArgs(inputFileName, outputFileName, conversionFormat, selectedFile.metadata.category);
+
+      // Execute FFmpeg conversion
+      await ffmpeg.exec(ffmpegArgs);
+
+      // Read output file from FFmpeg virtual filesystem
+      const outputData = await ffmpeg.readFile(outputFileName);
+
+      // Determine correct MIME type for output
+      const mimeType = getMimeType(conversionFormat);
+
+      // Create blob from output
+      const outputBlob = new Blob([outputData.buffer], { type: mimeType });
+
+      // Clean up FFmpeg filesystem
+      await ffmpeg.deleteFile(inputFileName);
+      await ffmpeg.deleteFile(outputFileName);
+
       setProgress(100);
-
-      // Create mock output file (in production: from WASM output)
-      const outputFileName = `converted-${Date.now()}.${conversionFormat}`;
-      const mockBlob = new Blob(['Mock converted media'], {
-        type: 'application/octet-stream',
-      });
-
       setProcessedFile({
-        blob: mockBlob,
-        fileName: outputFileName,
-        size: mockBlob.size,
+        blob: outputBlob,
+        fileName: `converted-${Date.now()}.${conversionFormat}`,
+        size: outputBlob.size,
       });
 
       // WCAG 2.4.9: Announce completion to screen readers
-      announceToScreenReader('Conversion completed successfully.');
+      announceToScreenReader('Conversion completed successfully. Your file is ready to download.');
     } catch (error) {
-      setValidationErrors(['Conversion failed. Please try again.']);
+      console.error('Conversion error:', error);
+      setValidationErrors([`Conversion failed: ${error.message || 'Unknown error'}. Please try a different format.`]);
       announceToScreenReader('Conversion failed. Please try again.');
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  /**
+   * Build FFmpeg arguments based on input/output formats
+   */
+  const buildFFmpegArgs = (input, output, format, category) => {
+    const baseArgs = ['-i', input];
+
+    // Audio conversions
+    if (['mp3', 'wav', 'aac', 'flac'].includes(format)) {
+      if (format === 'mp3') {
+        return [...baseArgs, '-vn', '-acodec', 'libmp3lame', '-q:a', '2', output];
+      } else if (format === 'wav') {
+        return [...baseArgs, '-vn', '-acodec', 'pcm_s16le', output];
+      } else if (format === 'aac') {
+        return [...baseArgs, '-vn', '-acodec', 'aac', '-b:a', '192k', output];
+      } else if (format === 'flac') {
+        return [...baseArgs, '-vn', '-acodec', 'flac', output];
+      }
+    }
+
+    // Video conversions
+    if (['mp4', 'webm', 'avi', 'mkv'].includes(format)) {
+      if (format === 'mp4') {
+        return [...baseArgs, '-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-c:a', 'aac', output];
+      } else if (format === 'webm') {
+        return [...baseArgs, '-c:v', 'libvpx', '-crf', '30', '-b:v', '0', '-c:a', 'libvorbis', output];
+      } else if (format === 'avi') {
+        return [...baseArgs, '-c:v', 'mpeg4', '-q:v', '5', '-c:a', 'mp3', output];
+      } else if (format === 'mkv') {
+        return [...baseArgs, '-c:v', 'copy', '-c:a', 'copy', output];
+      }
+    }
+
+    // Image/GIF conversions
+    if (['gif', 'png', 'jpg', 'webp'].includes(format)) {
+      if (format === 'gif') {
+        return [...baseArgs, '-vf', 'fps=10,scale=480:-1:flags=lanczos', '-loop', '0', output];
+      } else if (format === 'png') {
+        return [...baseArgs, '-vframes', '1', output];
+      } else if (format === 'jpg') {
+        return [...baseArgs, '-vframes', '1', '-q:v', '2', output];
+      } else if (format === 'webp') {
+        return [...baseArgs, '-vframes', '1', '-quality', '80', output];
+      }
+    }
+
+    // Default: simple copy
+    return [...baseArgs, '-c', 'copy', output];
+  };
+
+  /**
+   * Get MIME type for output format
+   */
+  const getMimeType = (format) => {
+    const mimeTypes = {
+      mp3: 'audio/mpeg',
+      wav: 'audio/wav',
+      aac: 'audio/aac',
+      flac: 'audio/flac',
+      mp4: 'video/mp4',
+      webm: 'video/webm',
+      avi: 'video/x-msvideo',
+      mkv: 'video/x-matroska',
+      gif: 'image/gif',
+      png: 'image/png',
+      jpg: 'image/jpeg',
+      webp: 'image/webp',
+    };
+    return mimeTypes[format] || 'application/octet-stream';
   };
 
   /**
