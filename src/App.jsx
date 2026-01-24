@@ -670,19 +670,11 @@ export default function App() {
               </div>
             </section>
           )}
-
-          {/* Security & Compliance Info */}
-          <section
-            aria-labelledby="compliance-section-title"
-            className="section compliance-section"
-          >
-            <h2 id="compliance-section-title" className="section-title">
-              Security & Privacy
-            </h2>
-            <SecurityStatus />
-          </section>
         </div>
       </main>
+
+      {/* Floating Info Button */}
+      <InfoButton />
 
       {/* ====== FOOTER ====== */}
       <footer role="contentinfo" className="app-footer">
@@ -703,57 +695,159 @@ export default function App() {
 }
 
 /**
- * Security Status Component
- * Displays compliance and security status
- * WCAG 2.4.2: Purpose of link/component is clear
+ * Info Button with Modal
+ * Shows security & compliance info on click
  */
-function SecurityStatus() {
+function InfoButton() {
+  const [isOpen, setIsOpen] = useState(false);
   const securityStatus = getSecurityStatus();
 
+  // Close on Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   return (
-    <div className="security-status-grid">
-      <div className="status-card">
-        <h3 className="status-card-title">🔒 Security Features</h3>
-        <ul className="status-list">
-          <li>
-            <span className="status-badge">✓</span> Content Security Policy (CSP) Enabled
-          </li>
-          <li>
-            <span className={`status-badge ${securityStatus.features.crossOriginIsolated ? 'active' : 'inactive'}`}>
-              {securityStatus.features.crossOriginIsolated ? '✓' : '✗'}
-            </span>
-            Cross-Origin Isolation (WASM Support)
-          </li>
-          <li>
-            <span className="status-badge">✓</span> Zero-Trust File Validation (Magic Numbers)
-          </li>
-          <li>
-            <span className="status-badge">✓</span> GDPR/PIPEDA Compliant (No Tracking)
-          </li>
-        </ul>
-      </div>
+    <>
+      {/* Floating Button */}
+      <button
+        className="info-fab"
+        onClick={() => setIsOpen(true)}
+        aria-label="View security and privacy information"
+        title="Security & Privacy Info"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      </button>
 
-      <div className="status-card">
-        <h3 className="status-card-title">📋 Supported Formats</h3>
-        <p className="status-subtitle">Video:</p>
-        <p className="format-list">MP4 • MKV • AVI • WebM</p>
-        <p className="status-subtitle">Audio:</p>
-        <p className="format-list">MP3 • WAV • FLAC • AAC</p>
-        <p className="status-subtitle">Image:</p>
-        <p className="format-list">GIF • WebP • PNG • JPEG • BMP</p>
-      </div>
+      {/* Modal Overlay */}
+      {isOpen && (
+        <div 
+          className="modal-overlay" 
+          onClick={() => setIsOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="info-modal-title"
+        >
+          <div 
+            className="modal-content" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="modal-header">
+              <h2 id="info-modal-title" className="modal-title">
+                🔐 Security & Privacy
+              </h2>
+              <button 
+                className="modal-close" 
+                onClick={() => setIsOpen(false)}
+                aria-label="Close modal"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
 
-      <div className="status-card">
-        <h3 className="status-card-title">🌍 Standards Compliance</h3>
-        <ul className="status-list">
-          <li>ISO/IEC 40500:2025 (WCAG 2.2 AAA)</li>
-          <li>EN 301 549 (EU Accessibility)</li>
-          <li>ISO/IEC 27001:2022 (Security)</li>
-          <li>GDPR Article 32 (Data Protection)</li>
-          <li>PIPEDA (Privacy Law)</li>
-        </ul>
-      </div>
-    </div>
+            {/* Modal Body */}
+            <div className="modal-body">
+              {/* Security Features */}
+              <div className="info-card">
+                <h3 className="info-card-title">🔒 Security Features</h3>
+                <ul className="info-list">
+                  <li className="info-item success">
+                    <span className="info-icon">✓</span>
+                    <span>Content Security Policy (CSP) Enabled</span>
+                  </li>
+                  <li className={`info-item ${securityStatus.features.crossOriginIsolated ? 'success' : 'warning'}`}>
+                    <span className="info-icon">{securityStatus.features.crossOriginIsolated ? '✓' : '⚠'}</span>
+                    <span>Cross-Origin Isolation (WASM Support)</span>
+                  </li>
+                  <li className="info-item success">
+                    <span className="info-icon">✓</span>
+                    <span>Zero-Trust File Validation</span>
+                  </li>
+                  <li className="info-item success">
+                    <span className="info-icon">✓</span>
+                    <span>No Data Tracking or Collection</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Supported Formats */}
+              <div className="info-card">
+                <h3 className="info-card-title">📁 Supported Formats</h3>
+                <div className="format-grid">
+                  <div className="format-category">
+                    <span className="format-label">Video</span>
+                    <span className="format-tags">
+                      <span className="format-tag">MP4</span>
+                      <span className="format-tag">MKV</span>
+                      <span className="format-tag">AVI</span>
+                      <span className="format-tag">WebM</span>
+                    </span>
+                  </div>
+                  <div className="format-category">
+                    <span className="format-label">Audio</span>
+                    <span className="format-tags">
+                      <span className="format-tag">MP3</span>
+                      <span className="format-tag">WAV</span>
+                      <span className="format-tag">FLAC</span>
+                      <span className="format-tag">AAC</span>
+                    </span>
+                  </div>
+                  <div className="format-category">
+                    <span className="format-label">Image</span>
+                    <span className="format-tags">
+                      <span className="format-tag">GIF</span>
+                      <span className="format-tag">WebP</span>
+                      <span className="format-tag">PNG</span>
+                      <span className="format-tag">JPEG</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Compliance */}
+              <div className="info-card">
+                <h3 className="info-card-title">🌍 Standards Compliance</h3>
+                <div className="compliance-badges">
+                  <span className="compliance-badge">WCAG 2.2 AAA</span>
+                  <span className="compliance-badge">GDPR</span>
+                  <span className="compliance-badge">PIPEDA</span>
+                  <span className="compliance-badge">ISO 27001</span>
+                  <span className="compliance-badge">EN 301 549</span>
+                </div>
+              </div>
+
+              {/* Privacy Notice */}
+              <div className="info-card highlight">
+                <h3 className="info-card-title">🛡️ Your Privacy</h3>
+                <p className="privacy-text">
+                  All file processing happens <strong>entirely in your browser</strong>. 
+                  Your files never leave your device and are not uploaded to any server. 
+                  We use no cookies, no tracking, and collect no data.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
