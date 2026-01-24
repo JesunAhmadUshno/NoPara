@@ -850,6 +850,25 @@ function InfoButton() {
           </div>
         </div>
       )}
+
+      {/* Buy Me a Coffee Floating Button */}
+      <a
+        href="https://buymeacoffee.com/jesun"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="coffee-fab"
+        aria-label="Buy me a coffee"
+        title="Buy me a coffee"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+          <path d="M2 21V19H20V21H2ZM20 8V5H18V8H20ZM20 3C21.1 3 22 3.9 22 5V8C22 9.1 21.1 10 20 10H18V13C18 15.21 16.21 17 14 17H8C5.79 17 4 15.21 4 13V3H20ZM14 15C15.1 15 16 14.1 16 13V5H6V13C6 14.1 6.9 15 8 15H14Z"/>
+        </svg>
+      </a>
+
+      {/* Footer */}
+      <footer className="app-footer">
+        <p>Developed by <a href="https://jesunahmadushno.com" target="_blank" rel="noopener noreferrer">Jesun</a></p>
+      </footer>
     </>
   );
 }

@@ -1193,3 +1193,111 @@
     height: 24px;
   }
 }
+
+/* ========================================
+   Buy Me Coffee Floating Button
+   ======================================== */
+
+.coffee-fab {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: var(--space-xl);
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #ff813f 0%, #ffdd00 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(255, 129, 63, 0.4), 0 0 30px rgba(255, 221, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  text-decoration: none;
+  animation: coffeePulse 2s ease-in-out infinite alternate;
+}
+
+.coffee-fab:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 6px 30px rgba(255, 129, 63, 0.6), 0 0 50px rgba(255, 221, 0, 0.5);
+}
+
+.coffee-fab:active {
+  transform: scale(0.95);
+}
+
+.coffee-fab svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes coffeePulse {
+  0% {
+    box-shadow: 0 4px 20px rgba(255, 129, 63, 0.4), 0 0 30px rgba(255, 221, 0, 0.3);
+  }
+  100% {
+    box-shadow: 0 4px 25px rgba(255, 129, 63, 0.6), 0 0 40px rgba(255, 221, 0, 0.4);
+  }
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+
+.app-footer {
+  padding: var(--space-lg) var(--space-xl);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+}
+
+.app-footer p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.app-footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.app-footer a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-neon);
+  transition: width 0.3s ease;
+}
+
+.app-footer a:hover {
+  color: var(--primary-light);
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+
+.app-footer a:hover::after {
+  width: 100%;
+}
+
+/* Responsive Coffee Button */
+@media (max-width: 640px) {
+  .coffee-fab {
+    bottom: var(--space-lg);
+    left: var(--space-lg);
+    width: 48px;
+    height: 48px;
+  }
+
+  .coffee-fab svg {
+    width: 24px;
+    height: 24px;
+  }
+}
