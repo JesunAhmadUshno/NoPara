@@ -313,10 +313,17 @@ export default function App() {
       }
     }
 
-    // Image/GIF conversions
+    // Image/GIF conversions - HIGH QUALITY
     if (['gif', 'png', 'jpg', 'webp'].includes(format)) {
       if (format === 'gif') {
-        return [...baseArgs, '-vf', 'fps=10,scale=480:-1:flags=lanczos', '-loop', '0', output];
+        // High quality GIF: keep original scale, 15fps, use high quality lanczos scaling
+        // split[s0][s1];[s0]palettegen=max_colors=256:stats_mode=full[p];[s1][p]paletteuse=dither=sierra2_4a
+        return [
+          ...baseArgs,
+          '-vf', 'fps=15,split[s0][s1];[s0]palettegen=max_colors=256:stats_mode=diff[p];[s1][p]paletteuse=dither=floyd_steinberg',
+          '-loop', '0',
+          output
+        ];
       } else if (format === 'png') {
         return [...baseArgs, '-vframes', '1', output];
       } else if (format === 'jpg') {
