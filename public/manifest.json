@@ -1,14 +1,17 @@
 {
-  "name": "NoPara - Secure Media Conversion",
+  "name": "NoPara - Free Online Video Converter | MP4 to GIF, MP3, WebM",
   "short_name": "NoPara",
-  "description": "Secure, serverless, browser-based media conversion with WCAG 2.2 AAA accessibility and zero-data-tracking",
+  "description": "Free online video converter - Convert MP4 to GIF, WebM, MP3, AVI, MKV instantly in your browser. 100% private, no upload required. Best free media converter 2026.",
   "scope": "/NoPara/",
   "start_url": "/NoPara/index.html",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#1a1a1a",
-  "background_color": "#ffffff",
-  "categories": ["productivity", "utilities"],
+  "theme_color": "#0a0a0f",
+  "background_color": "#0a0a0f",
+  "categories": ["productivity", "utilities", "multimedia"],
+  "keywords": "video converter, mp4 to gif, online converter, free converter, media converter, mp4 to mp3, webm converter",
+  "lang": "en-US",
+  "dir": "ltr",
 
   "icons": [
     {
