@@ -39,7 +39,6 @@
         frame-ancestors 'none';
         base-uri 'self';
         form-action 'self';
-        upgrade-insecure-requests;
       "
     />
 
@@ -68,15 +67,15 @@
          ======================================== -->
     <meta name="theme-color" content="#1a1a1a" />
     <meta name="description" content="Secure, browser-based media conversion. WCAG 2.2 AAA accessible. Zero data tracking." />
-    <link rel="manifest" href="/NoPara/manifest.json" />
-    <link rel="icon" type="image/svg+xml" href="/NoPara/favicon.svg" />
-    <link rel="apple-touch-icon" href="/NoPara/apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
 
     <!-- ========================================
          Preload Critical Assets (Core Web Vitals - LCP)
          Fonts: Preload for faster text rendering
          ======================================== -->
-    <link rel="preload" href="/NoPara/fonts/system-ui.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/system-ui.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- ========================================
          Service Worker Registration (Offline Capability)
@@ -86,7 +85,7 @@
       // ISO/IEC 27001: Register Service Worker only after main JS loads
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/NoPara/service-worker.js').catch(err => {
+          navigator.serviceWorker.register('./service-worker.js').catch(err => {
             // Fail silently - offline capability is optional
             console.info('SW registration failed (offline mode disabled):', err.message);
           });
