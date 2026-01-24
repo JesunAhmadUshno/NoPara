@@ -43,9 +43,49 @@ export default function App() {
     crf: 28, // Quality: 18-28 (lower = better quality, higher file size)
     preset: 'medium', // fast, medium, slow (slower = better compression)
   });
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingText, setLoadingText] = useState('Initializing...');
 
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
+
+  // ========================================
+  // Bootloader / Loading Screen
+  // ========================================
+  useEffect(() => {
+    const loadingMessages = [
+      'Initializing...',
+      'Loading core modules...',
+      'Preparing FFmpeg engine...',
+      'Setting up secure environment...',
+      'Configuring media codecs...',
+      'Almost ready...'
+    ];
+
+    let progress = 0;
+    let messageIndex = 0;
+
+    const progressInterval = setInterval(() => {
+      progress += Math.random() * 15 + 5;
+      if (progress > 100) progress = 100;
+      setLoadingProgress(progress);
+
+      // Update loading message
+      const newIndex = Math.min(Math.floor(progress / 20), loadingMessages.length - 1);
+      if (newIndex !== messageIndex) {
+        messageIndex = newIndex;
+        setLoadingText(loadingMessages[messageIndex]);
+      }
+
+      if (progress >= 100) {
+        clearInterval(progressInterval);
+        setTimeout(() => setIsLoading(false), 500);
+      }
+    }, 200);
+
+    return () => clearInterval(progressInterval);
+  }, []);
 
   // ========================================
   // File Handling (Zero-Trust Validation)
@@ -349,6 +389,44 @@ export default function App() {
   // ========================================
   // UI Rendering
   // ========================================
+
+  // Show bootloader while loading
+  if (isLoading) {
+    return (
+      <div className="bootloader">
+        <div className="bootloader-content">
+          <div className="bootloader-logo-container">
+            <svg className="bootloader-ring" viewBox="0 0 100 100">
+              <circle
+                className="bootloader-ring-bg"
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                strokeWidth="4"
+              />
+              <circle
+                className="bootloader-ring-progress"
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                strokeWidth="4"
+                strokeDasharray={`${loadingProgress * 2.83} 283`}
+                strokeLinecap="round"
+              />
+            </svg>
+            <img src="./logo.png" alt="NoPara" className="bootloader-logo" />
+          </div>
+          <div className="bootloader-text">
+            <h1 className="bootloader-title">NoPara</h1>
+            <p className="bootloader-status">{loadingText}</p>
+            <span className="bootloader-percent">{Math.round(loadingProgress)}%</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="app-container">
