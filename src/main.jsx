@@ -11,6 +11,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import '../public/styles/globals.css';
+import '../public/styles/components.css';
+import '../public/styles/accessibility.css';
 
 // ========================================
 // Initialize React Application

@@ -355,11 +355,14 @@ export default function App() {
       {/* ====== HEADER ====== */}
       <header role="banner" className="app-header">
         <div className="header-content">
-          <h1 id="app-title">NoPara</h1>
+          <h1 id="app-title">✨ NoPara</h1>
           <p className="header-subtitle">Secure Browser-Based Media Conversion</p>
-          <p className="header-descriptor">
-            WCAG 2.2 AAA • Zero-Trust • No Tracking • Offline Capable
-          </p>
+          <div className="header-descriptor">
+            <span>🔒 Zero-Trust</span>
+            <span>♿ WCAG 2.2 AAA</span>
+            <span>🌱 Green Coding</span>
+            <span>📴 Offline Ready</span>
+          </div>
         </div>
       </header>
 
@@ -521,7 +524,7 @@ export default function App() {
                       crf: parseInt(e.target.value),
                     })
                   }
-                  className="form-slider"
+                  className="form-range"
                   aria-describedby="crf-hint"
                 />
                 <p id="crf-hint" className="form-hint">
@@ -532,7 +535,7 @@ export default function App() {
               {/* Compression Preset */}
               <div className="form-group">
                 <legend className="form-label">Compression Speed:</legend>
-                <div className="form-radio-group">
+                <div className="radio-group">
                   {['fast', 'medium', 'slow'].map((preset) => (
                     <div key={preset} className="form-radio">
                       <input
@@ -578,7 +581,7 @@ export default function App() {
               <h2 id="editing-section-title" className="section-title">
                 3. Optional Editing (Green Feature - Reduces Processing)
               </h2>
-              <div className="button-group">
+              <div className="btn-group">
                 <button
                   onClick={() => setEditorMode('trim')}
                   className="btn btn-secondary"
@@ -612,23 +615,28 @@ export default function App() {
 
               {/* Progress Bar (WCAG 2.4.8) */}
               {isProcessing && (
-                <div
-                  className="progress-container"
-                  role="progressbar"
-                  aria-valuenow={Math.round(progress)}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  aria-label="Conversion progress"
-                >
-                  <div className="progress-bar" style={{ width: `${progress}%` }}></div>
-                  <span className="progress-text" aria-live="polite">
-                    {Math.round(progress)}%
-                  </span>
+                <div className="progress-container">
+                  <div className="progress-label">
+                    <span className="progress-text">
+                      {ffmpegLoading ? '🔧 Loading FFmpeg...' : '⚡ Converting...'}
+                    </span>
+                    <span className="progress-value">{Math.round(progress)}%</span>
+                  </div>
+                  <div
+                    className="progress-bar"
+                    role="progressbar"
+                    aria-valuenow={Math.round(progress)}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-label="Conversion progress"
+                  >
+                    <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+                  </div>
                 </div>
               )}
 
               {/* Action Buttons */}
-              <div className="button-group">
+              <div className="btn-group">
                 <button
                   onClick={handleConvert}
                   disabled={isProcessing || !selectedFile}
@@ -679,20 +687,15 @@ export default function App() {
       {/* ====== FOOTER ====== */}
       <footer role="contentinfo" className="app-footer">
         <div className="footer-content">
+          <div className="footer-badges">
+            <span className="badge badge-success">✓ WCAG 2.2 AAA</span>
+            <span className="badge badge-success">✓ GDPR Compliant</span>
+            <span className="badge badge-success">✓ Zero-Trust</span>
+            <span className="badge">🌱 Green Coded</span>
+          </div>
           <p className="footer-text">
-            NoPara • WCAG 2.2 AAA • GDPR/PIPEDA Compliant • Zero-Trust Architecture
+            NoPara © 2026 • All processing happens in your browser • No data leaves your device
           </p>
-          <ul className="footer-links">
-            <li>
-              <a href="#privacy">Privacy Policy</a>
-            </li>
-            <li>
-              <a href="#accessibility">Accessibility Statement</a>
-            </li>
-            <li>
-              <a href="#security">Security Notice</a>
-            </li>
-          </ul>
         </div>
       </footer>
     </div>
