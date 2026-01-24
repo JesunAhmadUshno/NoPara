@@ -355,7 +355,10 @@ export default function App() {
       {/* ====== HEADER ====== */}
       <header role="banner" className="app-header">
         <div className="header-content">
-          <h1 id="app-title">✨ NoPara</h1>
+          <div className="logo-title">
+            <img src="./logo.png" alt="NoPara Logo" className="header-logo" />
+            <h1 id="app-title">NoPara</h1>
+          </div>
           <p className="header-subtitle">Secure Browser-Based Media Conversion</p>
           <div className="header-descriptor">
             <span>🔒 Zero-Trust</span>

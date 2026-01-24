@@ -11,46 +11,53 @@
    ======================================== */
 
 :root {
-  /* Modern Color Palette */
-  --primary: #6366f1;
-  --primary-light: #818cf8;
-  --primary-dark: #4f46e5;
-  --secondary: #ec4899;
-  --secondary-light: #f472b6;
-  --accent: #06b6d4;
-  --accent-light: #22d3ee;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  /* Graffiti Neon Color Palette */
+  --primary: #00e5ff;
+  --primary-light: #6effff;
+  --primary-dark: #00b2cc;
+  --secondary: #ff00ff;
+  --secondary-light: #ff66ff;
+  --accent: #39ff14;
+  --accent-light: #7fff00;
+  --purple: #9d4edd;
+  --purple-light: #c77dff;
+  --orange: #ff6d00;
+  --orange-light: #ff9e40;
+  --success: #39ff14;
+  --warning: #ff6d00;
+  --error: #ff1744;
   
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-  --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #6366f1 100%);
-  --gradient-dark: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%);
-  --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  /* Graffiti Gradients */
+  --gradient-primary: linear-gradient(135deg, #00e5ff 0%, #ff00ff 50%, #9d4edd 100%);
+  --gradient-secondary: linear-gradient(135deg, #39ff14 0%, #00e5ff 50%, #ff00ff 100%);
+  --gradient-neon: linear-gradient(135deg, #ff00ff 0%, #00e5ff 25%, #39ff14 50%, #ff6d00 75%, #9d4edd 100%);
+  --gradient-dark: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(0, 229, 255, 0.1) 0%, rgba(255, 0, 255, 0.05) 100%);
+  --gradient-success: linear-gradient(135deg, #39ff14 0%, #00e5ff 100%);
   
-  /* Surfaces */
-  --bg-primary: #0f0f23;
-  --bg-secondary: #1a1a2e;
-  --bg-card: rgba(30, 30, 60, 0.6);
-  --bg-glass: rgba(255, 255, 255, 0.05);
+  /* Dark Graffiti Surfaces */
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: rgba(20, 10, 40, 0.7);
+  --bg-glass: rgba(0, 229, 255, 0.05);
   
   /* Text */
   --text-primary: #ffffff;
-  --text-secondary: #a5b4fc;
-  --text-muted: #6b7280;
+  --text-secondary: #b8c0ff;
+  --text-muted: #7c7c8a;
   
   /* Borders */
-  --border-glass: rgba(255, 255, 255, 0.1);
-  --border-glow: rgba(99, 102, 241, 0.5);
+  --border-glass: rgba(0, 229, 255, 0.2);
+  --border-glow: rgba(255, 0, 255, 0.5);
   
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
-  --shadow-glow-pink: 0 0 40px rgba(236, 72, 153, 0.3);
+  /* Neon Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 40px rgba(0, 229, 255, 0.4);
+  --shadow-glow-pink: 0 0 40px rgba(255, 0, 255, 0.4);
+  --shadow-glow-green: 0 0 40px rgba(57, 255, 20, 0.4);
+  --shadow-neon: 0 0 20px rgba(0, 229, 255, 0.6), 0 0 40px rgba(255, 0, 255, 0.4), 0 0 60px rgba(57, 255, 20, 0.2);
   
   /* Spacing */
   --space-xs: 0.25rem;
@@ -265,8 +272,8 @@ a:hover {
 }
 
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 229, 255, 0.3), 0 0 40px rgba(255, 0, 255, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(0, 229, 255, 0.6), 0 0 60px rgba(255, 0, 255, 0.4); }
 }
 
 @keyframes spin {
@@ -282,9 +289,9 @@ a:hover {
 }
 
 @keyframes progressPulse {
-  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 229, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
 }
 
 @keyframes gradientMove {
