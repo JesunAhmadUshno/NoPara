@@ -21,6 +21,33 @@ Production-grade, serverless, browser-based media conversion platform with enter
 ![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?style=for-the-badge)
 ![Privacy](https://img.shields.io/badge/Privacy-100%25%20Local-39ff14?style=for-the-badge)
 
+## Start here
+
+1. Open the live app: https://jesunahmadushno.github.io/NoPara/
+2. Drop in a file. Pick the output format. Convert. The file never
+   leaves your device.
+3. Or run it from source: `npm install`, then `npm run dev`
+   (Node 18 or newer).
+
+## Benchmarks and limits
+
+| Item | Value | Where it comes from |
+| :--- | :--- | :--- |
+| Video formats in | 9: MP4, WebM, MKV, AVI, MOV, FLV, WMV, MPEG, OGG | Core Features list below |
+| Audio formats in | 8: MP3, WAV, FLAC, AAC, OGG, WMA, M4A, OPUS | Core Features list below |
+| Image formats in | 6: GIF, WebP, PNG, JPEG, BMP, TIFF | Core Features list below |
+| Max file size, video | 1 GB | `MAX_FILE_SIZES` in `src/utils/security.js` |
+| Max file size, audio | 500 MB | `MAX_FILE_SIZES` in `src/utils/security.js` |
+| Max file size, image | 100 MB | `MAX_FILE_SIZES` in `src/utils/security.js` |
+| Audio bitrate range | 128k to 320k | Conversion Settings below |
+| Video bitrate range | 1M to 50M | Conversion Settings below |
+| Conversion speed | TBD-NO-RECORD | No timed conversion run is recorded in this repo yet |
+
+Speed depends on the device that runs the browser. No benchmark run is
+published yet. To add one: time a 60 second 1080p MP4 to WebM conversion
+on a named device, then record the device, the file, and the seconds in
+this table.
+
 ## ✨ Features
 
 ### 🎨 Graffiti Neon UI
