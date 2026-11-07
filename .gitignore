@@ -24,3 +24,8 @@ coverage/
 !public/
 # Keep src/ for source code
 !src/
+
+# Live dashboard build outputs
+site/.rubric/
+site/node_modules/
+site/dist/
