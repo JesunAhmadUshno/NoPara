@@ -118,7 +118,7 @@ this table.
 NoPara/
 ├── public/
 │   ├── coi-serviceworker.js      # Cross-Origin Isolation workaround
-│   ├── service-worker.js          # Offline capability & caching
+│   ├── service-worker.js          # Offline cache (not registered; it would replace the COI worker)
 │   ├── manifest.json              # PWA manifest
 │   ├── styles/
 │   │   ├── globals.css            # Global styles + variables

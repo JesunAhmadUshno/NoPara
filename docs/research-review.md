@@ -56,9 +56,8 @@ These are type-filter weaknesses, not demonstrated security exploits.
 
 - Conformance claims (WCAG 2.2 AAA, EN 301 549, ISO/IEC 27001, GDPR Art. 32) are
   asserted in code comments and the certification documents, with no audit output.
-- Two service workers register at the same `/NoPara/` scope; which one controls the
-  page, and how that affects offline use and cross-origin isolation, is untested.
-  The dashboard sits inside that scope, so its font link uses `crossorigin`.
+- Only `coi-serviceworker.js` registers at the `/NoPara/` scope (it also caches
+  responses); offline use is untested. The dashboard sits inside that scope, so its font link uses `crossorigin`.
 - The magic-number check reads 512 bytes; it is not content validation.
 
 ## Remaining gaps and exactly what each needs
@@ -73,4 +72,4 @@ These are type-filter weaknesses, not demonstrated security exploits.
 | Stronger signature check | Require all entries for RIFF formats, read the EBML DocType to split WebM from MKV. Product change; tests already pin today's behaviour. |
 | Pinned dependencies and lint | Exact versions in the root `package.json`, and an eslint config (the `lint` script has none). |
 | Dead code | Delete `src/utils/wasm-loader.js` after Owner approval. |
-| Service worker overlap | Pick one service worker, or merge them, then test offline and isolation. |
+| Offline test | Load once, go offline, reload; confirm the COI worker serves from cache. |

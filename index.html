@@ -301,15 +301,9 @@
          GDPR: No data persisted beyond RAM
          ======================================== -->
     <script>
-      // ISO/IEC 27001: Register Service Worker only after main JS loads
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./service-worker.js').catch(err => {
-            // Fail silently - offline capability is optional
-            console.info('SW registration failed (offline mode disabled):', err.message);
-          });
-        });
-      }
+      // Only one service worker can control scope ./ - registering service-worker.js here
+      // replaced the COI worker below on every visit, so isolation never stuck.
+      // coi-serviceworker.js also caches responses and serves them when offline.
 
       // ========================================
       // COI Service Worker (Cross-Origin Isolation Workaround)

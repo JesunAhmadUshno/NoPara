@@ -403,7 +403,7 @@ function Pipeline() {
         ))}
       </div>
       <p className="inbound"><span aria-hidden="true">↓</span> Only inbound download: the ffmpeg core from {outbound.map((o) => <code key={o}>{o.replace('https://', '')}</code>)} (CSP <code>connect-src</code>), into the ffmpeg.wasm step.</p>
-      <p className="hint">Caveat: the page also registers {SW_REGISTRATIONS} service workers at the same scope (an offline cache and the isolation shim), so one replaces the other; how offline caching and isolation interact has not been tested.</p>
+      <p className="hint">The page registers {SW_REGISTRATIONS === 1 ? 'one service worker, the isolation shim, which also caches responses for offline use' : `${SW_REGISTRATIONS} service workers at the same scope, so one replaces the other`}; offline use has not been tested.</p>
     </section>
   );
 }
@@ -418,7 +418,7 @@ function Claims() {
     { c: 'Adjustable quality (CRF, presets)', w: 'App UI', e: BUILDER_USES_SETTINGS ? 'The builder reads the UI settings.' : `buildFFmpegArgs never reads the slider (default ${CRF_UI}) or presets; MP4 is fixed at CRF ${MP4_CRF}.`, s: BUILDER_USES_SETTINGS ? 'verified' : 'contradicted' },
     { c: 'Strict CSP', w: 'index.html', e: `script-src includes 'unsafe-inline'; index.html has ${INLINE} inline <script> blocks. README wording corrected on this branch.`, s: CSP['script-src'].includes("'unsafe-inline'") ? 'partly' : 'verified' },
     { c: 'Sanitised file names', w: 'security.js', e: SANITIZES ? 'sanitizeFileName strips "..", path separators and control characters before the name is used.' : 'Not found.', s: SANITIZES ? 'verified' : 'contradicted' },
-    { c: 'Offline capability (PWA)', w: 'README', e: `${SW_REGISTRATIONS} service workers register at one scope, so only one controls the page at a time.`, s: 'unclear' },
+    { c: 'Offline capability (PWA)', w: 'README', e: SW_REGISTRATIONS === 1 ? 'Only coi-serviceworker.js registers; it caches responses and falls back to the cache offline. No offline test is recorded.' : `${SW_REGISTRATIONS} service workers register at one scope, so only one controls the page at a time.`, s: 'unclear' },
     { c: 'WCAG 2.2 AAA, ISO/IEC 27001, EN 301 549, GDPR Art. 32', w: 'README, code comments', e: 'No axe, Lighthouse, contrast or audit report is committed; the certification documents contain no test evidence.', s: 'asserted' },
     { c: 'Conversion speed', w: 'README table', e: `Recorded as ${README.speed}. No timed run exists.`, s: 'unmeasured' },
     { c: 'src/utils/wasm-loader.js', w: 'repo', e: WASM_LOADER_USED ? 'Imported.' : 'Not imported anywhere: dead code (kept, flagged).', s: WASM_LOADER_USED ? 'verified' : 'unused' },
