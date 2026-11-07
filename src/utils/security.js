@@ -20,8 +20,8 @@ export const SUPPORTED_FORMATS = {
   mp4: {
     mimeType: 'video/mp4',
     magicNumbers: [
-      { bytes: [0x00, 0x00, 0x00, 0x20, 0x66, 0x74, 0x79, 0x70], offset: 0 }, // ftyp (MP4/QuickTime)
-      { bytes: [0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70], offset: 0 }, // ftyp ISO Base Media
+      // "ftyp" after the 4-byte box size; the size varies with the number of brands
+      { bytes: [0x66, 0x74, 0x79, 0x70], offset: 4 },
     ],
   },
   mkv: {

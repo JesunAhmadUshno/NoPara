@@ -45,8 +45,6 @@ more than the code does).
 - A file named `.avi` passes with any RIFF header (for example a WAV), because
   signature entries are alternatives evaluated with `some()`.
 - WebM and MKV share the EBML signature and cannot be told apart.
-- MP4 is accepted only with `ftyp` box sizes 0x18 or 0x20; MP4s with other box
-  sizes (0x1C is common) are rejected.
 - A MIME mismatch is recorded as an error but the file is still marked valid.
 - `validateFile` returns a plain object on early failures and a Promise otherwise.
 - The CRF slider (default 28) and preset buttons are never passed to ffmpeg; MP4
@@ -72,7 +70,7 @@ These are type-filter weaknesses, not demonstrated security exploits.
 | Output correctness | `ffprobe` on each of the 11 outputs from one fixed input per category, checking codec and duration. Needs native ffmpeg locally. |
 | Accessibility claim | An axe-core run and a Lighthouse report on the live app, committed as JSON; contrast measured on the neon palette. |
 | Wire the quality controls | A small code change passing `crf` and `preset` into `buildFFmpegArgs`; a product decision for the Owner. |
-| Stronger signature check | Require all entries for RIFF formats, accept any `ftyp` box size, read the EBML DocType to split WebM from MKV. Product change; tests already pin today's behaviour. |
+| Stronger signature check | Require all entries for RIFF formats, read the EBML DocType to split WebM from MKV. Product change; tests already pin today's behaviour. |
 | Pinned dependencies and lint | Exact versions in the root `package.json`, and an eslint config (the `lint` script has none). |
 | Dead code | Delete `src/utils/wasm-loader.js` after Owner approval. |
 | Service worker overlap | Pick one service worker, or merge them, then test offline and isolation. |

@@ -25,7 +25,7 @@ test('format table: 4 video, 4 audio, 5 image inputs', () => {
 
 test('matchSignature on the real table', () => {
   assert.ok(matchSignature([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], SUPPORTED_FORMATS.png));
-  assert.ok(!matchSignature([0x00, 0x00, 0x00, 0x1c, 0x66, 0x74, 0x79, 0x70], SUPPORTED_FORMATS.mp4), 'ftyp size 0x1C is not in the table');
+  assert.ok(matchSignature([0x00, 0x00, 0x00, 0x1c, 0x66, 0x74, 0x79, 0x70], SUPPORTED_FORMATS.mp4), 'ftyp size 0x1C');
   assert.ok(matchSignature(RIFF('WAVE'), SUPPORTED_FORMATS.avi), 'RIFF alone satisfies avi');
   assert.ok(matchSignature([0x1a, 0x45, 0xdf, 0xa3], SUPPORTED_FORMATS.webm) && matchSignature([0x1a, 0x45, 0xdf, 0xa3], SUPPORTED_FORMATS.mkv));
   assert.ok(!matchSignature([0x89], SUPPORTED_FORMATS.png), 'short header fails');
@@ -34,7 +34,7 @@ test('matchSignature on the real table', () => {
 test('validateFile layers', async () => {
   assert.equal((await validateFile(file([0xff, 0xd8, 0xff], 'a.jpeg'))).valid, true);
   assert.equal((await validateFile(file(RIFF('WAVE'), 'renamed.avi'))).valid, true);
-  assert.equal((await validateFile(file([0, 0, 0, 0x1c, 0x66, 0x74, 0x79, 0x70], 'phone.mp4'))).valid, false);
+  assert.equal((await validateFile(file([0, 0, 0, 0x1c, 0x66, 0x74, 0x79, 0x70], 'phone.mp4'))).valid, true);
   assert.match((await validateFile(file([0], 'clip.mov'))).errors[0], /Unknown file format/);
   assert.match((await validateFile(file([0x42, 0x4d], 'tiny.bmp', '', 50))).errors[0], /corrupted/);
   const mism = await validateFile(file([0x42, 0x4d], 'x.bmp', 'image/png'));
@@ -55,4 +55,13 @@ test('F1: .jpg is accepted like .jpeg (the picker offers .jpg)', async () => {
   assert.equal(r.valid, true, r.errors.join(' | '));
   assert.equal(r.sanitized.category, 'image');
   assert.equal(r.errors.length, 0);
+});
+
+test('F2: any ftyp box size is accepted as MP4', async () => {
+  const ftyp = [0x66, 0x74, 0x79, 0x70, 0x69, 0x73, 0x6f, 0x6d]; // "ftypisom"
+  for (const size of [0x14, 0x18, 0x1c, 0x20, 0x24]) {
+    const r = await validateFile(file([0, 0, 0, size, ...ftyp], 'clip.mp4', 'video/mp4'));
+    assert.equal(r.valid, true, `box size 0x${size.toString(16)}: ${r.errors.join(' | ')}`);
+  }
+  assert.equal((await validateFile(file([0, 0, 0, 0x1c, 0x6d, 0x6f, 0x6f, 0x76], 'x.mp4'))).valid, false, 'no ftyp, no pass');
 });

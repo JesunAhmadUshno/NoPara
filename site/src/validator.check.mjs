@@ -49,7 +49,7 @@ assert.equal(t.speed, 'TBD-NO-RECORD');
 assert.ok(!/wasm-loader/.test(app + sec + read('src/main.jsx') + html), 'wasm-loader.js is imported now: update the audit');
 
 // 5. Every playground preset: recorded verdict, and the layer walk agrees with validateFile
-const want = { 'mp4-1c': false, 'wav-as-avi': true, 'webm-as-mkv': true, 'png-as-jpeg': false, mov: false, 'tiny-bmp': false, 'mime-mismatch': true };
+const want = { 'mp4-1c': true, 'wav-as-avi': true, 'webm-as-mkv': true, 'png-as-jpeg': false, mov: false, 'tiny-bmp': false, 'mime-mismatch': true };
 const verdicts = {};
 for (const p of PRESETS) {
   const r = await validateFile(makeFile(p));

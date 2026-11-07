@@ -28,7 +28,6 @@ const WASM_LOADER_USED = /wasm-loader/.test(appSrc + mainSrc + secSrc + indexHtm
 const BUILDER_USES_SETTINGS = /conversionSettings|settings\.crf/.test(argsSrc);
 const SANITIZES = /function sanitizeFileName/.test(secSrc) && /sanitizeFileName\(file\.name\)/.test(secSrc);
 const CATS = ['video', 'audio', 'image'];
-const MP4_SIZES = SUPPORTED_FORMATS.mp4.magicNumbers.map((s) => `0x${s.bytes[3].toString(16).toUpperCase()}`).join(' and ');
 const mp4Args = buildFFmpegArgs('i', 'o', 'mp4');
 const MP4_CRF = mp4Args[mp4Args.indexOf('-crf') + 1];
 const catCount = { video: schemas.videoFormats.length, audio: schemas.audioFormats.length, image: schemas.imageFormats.length };
@@ -415,7 +414,7 @@ function Claims() {
   const rows = [
     { c: 'Files never leave your device', w: 'README', e: `CSP connect-src allows only 'self' and ${CSP['connect-src'].filter((s) => s.startsWith('http')).join(', ')} (the ffmpeg core). No upload code exists in src/.`, s: 'verified' },
     { c: `Input formats: ${README.video} video, ${README.audio} audio, ${README.image} image`, w: 'README table', e: `The validator accepts ${catCount.video} / ${catCount.audio} / ${catCount.image}. Earlier README versions also listed MOV, FLV, WMV, MPEG, OGG, WMA, M4A, OPUS and TIFF, which the check rejects; corrected on this branch.`, s: readmeMatches ? 'verified' : 'contradicted' },
-    { c: 'Magic-number verification', w: 'README, security.js', e: `Implemented, but entries are alternatives: a WAV header named .avi ${riffPasses ? 'passes' : 'fails'}, WebM and MKV are indistinguishable, and MP4 accepts only ftyp box sizes ${MP4_SIZES}.`, s: 'partly' },
+    { c: 'Magic-number verification', w: 'README, security.js', e: `Implemented, but entries are alternatives: a WAV header named .avi ${riffPasses ? 'passes' : 'fails'} and WebM and MKV are indistinguishable.`, s: 'partly' },
     { c: 'Adjustable quality (CRF, presets)', w: 'App UI', e: BUILDER_USES_SETTINGS ? 'The builder reads the UI settings.' : `buildFFmpegArgs never reads the slider (default ${CRF_UI}) or presets; MP4 is fixed at CRF ${MP4_CRF}.`, s: BUILDER_USES_SETTINGS ? 'verified' : 'contradicted' },
     { c: 'Strict CSP', w: 'index.html', e: `script-src includes 'unsafe-inline'; index.html has ${INLINE} inline <script> blocks. README wording corrected on this branch.`, s: CSP['script-src'].includes("'unsafe-inline'") ? 'partly' : 'verified' },
     { c: 'Sanitised file names', w: 'security.js', e: SANITIZES ? 'sanitizeFileName strips "..", path separators and control characters before the name is used.' : 'Not found.', s: SANITIZES ? 'verified' : 'contradicted' },
