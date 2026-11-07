@@ -110,6 +110,12 @@ export const SUPPORTED_FORMATS = {
 };
 
 /**
+ * Extra extensions that name a format already in SUPPORTED_FORMATS
+ * (kept out of the table so format counts stay one per format)
+ */
+export const EXTENSION_ALIASES = { jpg: 'jpeg' };
+
+/**
  * Maximum file sizes (bytes) - Green Coding: Prevent excessive memory usage
  * ISO/IEC 27001: Resource limits prevent DoS attacks
  */
@@ -159,6 +165,7 @@ export function validateFile(file) {
 
   // Layer 2: File size validation (DoS prevention)
   const fileExtension = file.name.split('.').pop().toLowerCase();
+  const formatKey = EXTENSION_ALIASES[fileExtension] || fileExtension;
   const fileCategory = getFileCategory(fileExtension);
   
   if (!fileCategory) {
@@ -175,7 +182,7 @@ export function validateFile(file) {
   }
 
   // Layer 3: MIME type check (preliminary - can be spoofed)
-  const supportedFormat = SUPPORTED_FORMATS[fileExtension];
+  const supportedFormat = SUPPORTED_FORMATS[formatKey];
   if (!supportedFormat) {
     result.errors.push(SECURITY_ERRORS.INVALID_FILE_TYPE);
     return result;
@@ -279,7 +286,8 @@ export function matchSignature(headerBytes, format) {
  * @private
  */
 function getFileCategory(extension) {
-  const format = SUPPORTED_FORMATS[extension.toLowerCase()];
+  const ext = extension.toLowerCase();
+  const format = SUPPORTED_FORMATS[EXTENSION_ALIASES[ext] || ext];
   if (!format) return null;
 
   // Categorize based on MIME type

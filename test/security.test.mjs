@@ -49,3 +49,10 @@ test('ffmpeg args are fixed per format', () => {
   assert.equal(getMimeType('webp'), 'image/webp');
   assert.equal(getMimeType('xyz'), 'application/octet-stream');
 });
+
+test('F1: .jpg is accepted like .jpeg (the picker offers .jpg)', async () => {
+  const r = await validateFile(file([0xff, 0xd8, 0xff, 0xe0], 'photo.jpg', 'image/jpeg'));
+  assert.equal(r.valid, true, r.errors.join(' | '));
+  assert.equal(r.sanitized.category, 'image');
+  assert.equal(r.errors.length, 0);
+});

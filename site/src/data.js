@@ -1,7 +1,7 @@
 // Pure helpers shared by the page and by validator.check.mjs.
 // Every number the page shows is derived here from repo source text or from the
 // real src/utils modules; nothing is typed in by hand.
-import { SUPPORTED_FORMATS, MAX_FILE_SIZES, matchSignature } from '../../src/utils/security.js';
+import { SUPPORTED_FORMATS, EXTENSION_ALIASES, MAX_FILE_SIZES, matchSignature } from '../../src/utils/security.js';
 
 export const FORMATS = Object.entries(SUPPORTED_FORMATS).map(([ext, f]) => ({
   ext,
@@ -39,6 +39,7 @@ export const PRESETS = [
   { id: 'mp4-1c', edge: true, label: 'Real-world MP4, ftyp box size 0x1C', name: 'phone.mp4', bytes: [0, 0, 0, 0x1c, ...ascii('ftypisom')], size: 512 },
   { id: 'wav-as-avi', edge: true, label: 'WAV header renamed .avi', name: 'renamed.avi', bytes: headerFor('wav'), size: 512 },
   { id: 'webm-as-mkv', edge: true, label: 'WebM header named .mkv (shared EBML)', name: 'clip.mkv', bytes: headerFor('webm'), size: 512 },
+  { id: 'jpg', edge: true, label: 'JPEG photo named .jpg', name: 'photo.jpg', bytes: headerFor('jpeg'), size: 512 },
   { id: 'png-as-jpeg', edge: true, label: 'PNG bytes named .jpeg', name: 'photo.jpeg', bytes: headerFor('png'), size: 512 },
   { id: 'mov', edge: true, label: 'QuickTime .mov (not in the table)', name: 'clip.mov', bytes: [0, 0, 0, 0x14, ...ascii('ftypqt  ')], size: 512 },
   { id: 'tiny-bmp', edge: true, label: 'BMP header, only 50 bytes long', name: 'tiny.bmp', bytes: headerFor('bmp'), size: 50 },
@@ -55,7 +56,7 @@ export function makeFile({ bytes, name, size, type = '' }) {
 // validator.check.mjs asserts this agrees with validateFile on every preset.
 export function layers({ name, size, type = '', bytes }, readLimit) {
   const ext = name.split('.').pop().toLowerCase();
-  const f = SUPPORTED_FORMATS[ext];
+  const f = SUPPORTED_FORMATS[EXTENSION_ALIASES[ext] || ext];
   const cat = f ? f.mimeType.split('/')[0] : null;
   const head = bytes.slice(0, Math.min(size, readLimit));
   const steps = [
