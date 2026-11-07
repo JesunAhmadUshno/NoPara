@@ -65,3 +65,12 @@ test('F2: any ftyp box size is accepted as MP4', async () => {
   }
   assert.equal((await validateFile(file([0, 0, 0, 0x1c, 0x6d, 0x6f, 0x6f, 0x76], 'x.mp4'))).valid, false, 'no ftyp, no pass');
 });
+
+test('F3: MPEG-2/2.5 MP3 frames and ID3-tagged AAC pass the signature check', async () => {
+  for (const b1 of [0xfb, 0xfa, 0xf3, 0xf2, 0xe3, 0xe2]) {
+    const r = await validateFile(file([0xff, b1], 'voice.mp3', 'audio/mpeg'));
+    assert.equal(r.valid, true, `mp3 FF ${b1.toString(16)}: ${r.errors.join(' | ')}`);
+  }
+  const aac = await validateFile(file([0x49, 0x44, 0x33], 'song.aac', 'audio/aac'));
+  assert.equal(aac.valid, true, `aac ID3: ${aac.errors.join(' | ')}`);
+});

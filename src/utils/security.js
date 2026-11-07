@@ -50,6 +50,10 @@ export const SUPPORTED_FORMATS = {
     magicNumbers: [
       { bytes: [0xff, 0xfb], offset: 0 }, // MPEG Audio Frame (FFFB)
       { bytes: [0xff, 0xfa], offset: 0 }, // MPEG Audio Frame (FFFA)
+      { bytes: [0xff, 0xf3], offset: 0 }, // MPEG-2 Layer III frame (FFF3)
+      { bytes: [0xff, 0xf2], offset: 0 }, // MPEG-2 Layer III frame (FFF2)
+      { bytes: [0xff, 0xe3], offset: 0 }, // MPEG-2.5 Layer III frame (FFE3)
+      { bytes: [0xff, 0xe2], offset: 0 }, // MPEG-2.5 Layer III frame (FFE2)
       { bytes: [0x49, 0x44, 0x33], offset: 0 }, // ID3v2 tag
     ],
   },
@@ -71,6 +75,7 @@ export const SUPPORTED_FORMATS = {
     magicNumbers: [
       { bytes: [0xff, 0xf1], offset: 0 }, // AAC ADTS frame (FFF1)
       { bytes: [0xff, 0xf9], offset: 0 }, // AAC ADTS frame (FFF9)
+      { bytes: [0x49, 0x44, 0x33], offset: 0 }, // ID3v2 tag before the ADTS frames
     ],
   },
 
