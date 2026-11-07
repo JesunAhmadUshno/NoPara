@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+  <strong>Live dashboard: <a href="https://jesunahmadushno.github.io/NoPara/dashboard/">https://jesunahmadushno.github.io/NoPara/dashboard/</a></strong>
+  <br />Test the real file checks in your browser, see the exact ffmpeg arguments, and read a claims-versus-code audit.
+</p>
+
+<p align="center">
   <a href="https://buymeacoffee.com/jesun">☕ Buy Me a Coffee</a> •
   <a href="https://jesunahmadushno.com">👨‍💻 Developer</a>
 </p>
@@ -33,14 +38,14 @@ Production-grade, serverless, browser-based media conversion platform with enter
 
 | Item | Value | Where it comes from |
 | :--- | :--- | :--- |
-| Video formats in | 9: MP4, WebM, MKV, AVI, MOV, FLV, WMV, MPEG, OGG | Core Features list below |
-| Audio formats in | 8: MP3, WAV, FLAC, AAC, OGG, WMA, M4A, OPUS | Core Features list below |
-| Image formats in | 6: GIF, WebP, PNG, JPEG, BMP, TIFF | Core Features list below |
+| Video formats in | 4: MP4, MKV, AVI, WebM | `SUPPORTED_FORMATS` in `src/utils/security.js` |
+| Audio formats in | 4: MP3, WAV, FLAC, AAC | `SUPPORTED_FORMATS` in `src/utils/security.js` |
+| Image formats in | 5: JPEG, PNG, GIF, WebP, BMP | `SUPPORTED_FORMATS` in `src/utils/security.js` |
 | Max file size, video | 1 GB | `MAX_FILE_SIZES` in `src/utils/security.js` |
 | Max file size, audio | 500 MB | `MAX_FILE_SIZES` in `src/utils/security.js` |
 | Max file size, image | 100 MB | `MAX_FILE_SIZES` in `src/utils/security.js` |
-| Audio bitrate range | 128k to 320k | Conversion Settings below |
-| Video bitrate range | 1M to 50M | Conversion Settings below |
+| Output formats | 11: MP4, MKV, AVI, WebM, MP3, WAV, FLAC, AAC, GIF, WebP, PNG | Output menu in `src/App.jsx` |
+| Bitrate, resolution, frame rate controls | None in the app | Not present in `src/`; codec settings are fixed per format in `src/utils/ffmpeg-args.js` |
 | Conversion speed | TBD-NO-RECORD | No timed conversion run is recorded in this repo yet |
 
 Speed depends on the device that runs the browser. No benchmark run is
@@ -61,7 +66,7 @@ this table.
 - **Video**: MP4, WebM, MKV, AVI
 - **Audio**: MP3, WAV, FLAC, AAC
 - **Image**: GIF (high quality), WebP, PNG, JPEG
-- Adjustable quality settings (CRF, presets)
+- Quality slider (CRF) and preset buttons are shown, but not yet passed to ffmpeg: settings are fixed per format in `src/utils/ffmpeg-args.js`
 - Real-time conversion progress
 
 ### 🔒 100% Private
@@ -84,7 +89,7 @@ this table.
 
 ### Key Security Features
 - ✅ Cross-Origin Isolation (COOP/COEP) for WASM SharedArrayBuffer
-- ✅ Content Security Policy (CSP) - Strict, no inline scripts
+- ✅ Content Security Policy (CSP) - restricts sources; note `script-src` allows `'unsafe-inline'` and `index.html` has inline scripts
 - ✅ Zero-Trust File Validation - Magic number verification
 - ✅ No Data Tracking - Zero cookies, zero localStorage, zero analytics
 - ✅ Volatile RAM Only - Files never persisted to disk
@@ -124,7 +129,11 @@ NoPara/
 │   ├── main.jsx                   # React entry point
 │   ├── App.jsx                    # Main application component
 │   └── utils/
-│       └── security.js            # File validation + magic numbers
+│       ├── security.js            # File validation + magic numbers
+│       ├── ffmpeg-args.js         # ffmpeg argument builder + output MIME types
+│       └── wasm-loader.js         # Not imported anywhere (unused)
+├── site/                          # Live dashboard (served at /NoPara/dashboard/)
+├── test/                          # Smoke tests: npm test
 ├── index.html                     # Semantic HTML with CSP meta tags
 ├── vite.config.js                 # Vite build configuration
 ├── package.json                   # Dependencies
@@ -163,7 +172,7 @@ Security headers are enabled in dev mode:
 - COOP/COEP for Cross-Origin Isolation
 - X-Content-Type-Options: nosniff
 - X-Frame-Options: DENY
-- Strict CSP
+(The CSP itself comes from the meta tag in `index.html`.)
 
 ### Production Build
 Optimized for GitHub Pages deployment:
@@ -178,10 +187,14 @@ npm run build
 ## 🎯 Core Features
 
 ### 1. Real Media Conversion (FFmpeg.wasm)
-Actual client-side media conversion using FFmpeg compiled to WebAssembly:
-- **Video**: MP4, WebM, MKV, AVI, MOV, FLV, WMV, MPEG, OGG
-- **Audio**: MP3, WAV, FLAC, AAC, OGG, WMA, M4A, OPUS
-- **Image**: GIF (animated), WebP, PNG, JPEG, BMP, TIFF
+Actual client-side media conversion using FFmpeg compiled to WebAssembly.
+Inputs accepted by the file check (`src/utils/security.js`):
+- **Video**: MP4, MKV, AVI, WebM
+- **Audio**: MP3, WAV, FLAC, AAC
+- **Image**: JPEG, PNG, GIF, WebP, BMP
+
+Other files (MOV, FLV, WMV, MPEG, OGG, WMA, M4A, OPUS, TIFF) are rejected
+as an unknown format, even though ffmpeg itself could read most of them.
 
 ### 2. Modern Glassmorphism UI
 - Beautiful gradient backgrounds with animated effects
@@ -198,11 +211,10 @@ Actual client-side media conversion using FFmpeg compiled to WebAssembly:
 - Secure error messages (no stack traces)
 
 ### 4. Conversion Settings
-- Quality Level (Low/Medium/High/Very High/Lossless)
-- Bitrate Control (Audio: 128k-320k, Video: 1M-50M)
-- Resolution Options (Original, 480p, 720p, 1080p, 4K)
-- Frame Rate Control (Original, 24, 30, 60 fps)
-- Audio Sample Rate (44.1kHz, 48kHz, 96kHz)
+- Output format menu (11 formats)
+- A quality slider and fast/medium/slow preset buttons are shown; they are not
+  yet wired into the ffmpeg command
+- Bitrate, resolution, frame rate and sample rate controls are not built
 
 ### 5. Offline Capability (PWA)
 - Cache-first strategy for static assets
@@ -275,9 +287,9 @@ if (!validation.valid) {
 ```
 
 ### Content Security Policy
-Strict CSP in `index.html`:
-- No inline scripts
-- No external resources
+CSP meta tag in `index.html`:
+- `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:` (inline scripts are allowed and used)
+- Outbound requests limited to `'self'` and `https://unpkg.com` (the ffmpeg core download)
 - Data only in volatile RAM
 - WASM trusted via 'wasm-unsafe-eval'
 
