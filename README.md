@@ -251,9 +251,16 @@ To deploy your own:
 npm run deploy
 ```
 
-This runs `npm run build && gh-pages -d dist --dotfiles` which:
+This runs `npm run build && gh-pages -d dist --dotfiles --add` which:
 1. Builds the production bundle
-2. Deploys to the `gh-pages` branch automatically
+2. Deploys to the `gh-pages` branch automatically (`--add` keeps the
+   `dashboard/` folder; old hashed asset files are left in place)
+
+### Live dashboard
+`site/` holds a separate dashboard served at `/NoPara/dashboard/`. The
+`Pages dashboard` workflow (`.github/workflows/pages.yml`) builds it on every
+push to `main` that touches it and copies it into `gh-pages/dashboard/`, without
+touching the app. Build it locally with `cd site && npm ci && npm run build`.
 
 ### Security Headers for GitHub Pages
 The `coi-serviceworker.js` injects COOP/COEP headers since GitHub Pages doesn't allow direct header configuration.

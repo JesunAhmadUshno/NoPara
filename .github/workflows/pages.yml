@@ -1,0 +1,51 @@
+name: Pages dashboard
+
+# Builds the live dashboard in site/ and publishes it to gh-pages/dashboard/ (served at
+# https://jesunahmadushno.github.io/NoPara/dashboard/). The app itself stays where it is:
+# Pages keeps serving the gh-pages branch, and this job only replaces the dashboard/ folder,
+# so no Pages settings change is needed. The app is still deployed by `npm run deploy`,
+# which now passes --add so it no longer deletes dashboard/.
+on:
+  push:
+    branches: [main]
+    paths: ['site/**', 'src/utils/**', 'src/App.jsx', 'index.html', 'README.md', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-dashboard
+  cancel-in-progress: false
+
+jobs:
+  dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Repo smoke tests
+        run: npm test
+      - run: npm ci
+        working-directory: site
+      - name: Known-answer check + build
+        run: npm run build
+        working-directory: site
+      - name: Publish site/dist to gh-pages/dashboard/
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git fetch origin gh-pages --depth=1
+          git worktree add ../gh-pages origin/gh-pages
+          cd ../gh-pages
+          git checkout -B gh-pages
+          rm -rf dashboard
+          cp -r "$GITHUB_WORKSPACE/site/dist" dashboard
+          git add -A dashboard
+          if git diff --cached --quiet; then echo "Dashboard unchanged"; exit 0; fi
+          git commit -m "Publish dashboard from ${GITHUB_SHA::7}"
+          git push origin gh-pages
