@@ -15,7 +15,7 @@
  * Supported MIME types with security validation
  * Maps file extension → MIME type → magic number signature (hex bytes)
  */
-const SUPPORTED_FORMATS = {
+export const SUPPORTED_FORMATS = {
   // Video Formats
   mp4: {
     mimeType: 'video/mp4',
@@ -113,7 +113,7 @@ const SUPPORTED_FORMATS = {
  * Maximum file sizes (bytes) - Green Coding: Prevent excessive memory usage
  * ISO/IEC 27001: Resource limits prevent DoS attacks
  */
-const MAX_FILE_SIZES = {
+export const MAX_FILE_SIZES = {
   // Video: 1 GB (WASM memory constraint)
   video: 1024 * 1024 * 1024,
   // Audio: 500 MB
@@ -207,20 +207,7 @@ function validateMagicNumbers(file, format, result, fileExtension) {
         const headerBytes = new Uint8Array(event.target.result);
 
         // Check against all known magic number signatures
-        const isValid = format.magicNumbers.some((signature) => {
-          const offset = signature.offset;
-          const expectedBytes = signature.bytes;
-
-          // Ensure file is large enough for signature
-          if (headerBytes.length < offset + expectedBytes.length) {
-            return false;
-          }
-
-          // Compare bytes
-          return expectedBytes.every((byte, index) => {
-            return headerBytes[offset + index] === byte;
-          });
-        });
+        const isValid = matchSignature(headerBytes, format);
 
         if (!isValid) {
           result.errors.push(SECURITY_ERRORS.INVALID_SIGNATURE);
@@ -260,6 +247,30 @@ function validateMagicNumbers(file, format, result, fileExtension) {
 
     // Read only first 512 bytes for magic number check (performance)
     reader.readAsArrayBuffer(file.slice(0, 512));
+  });
+}
+
+/**
+ * Pure signature check: true when ANY one of the format's magic-number entries
+ * matches the header bytes (entries are alternatives, evaluated with some()).
+ * Note: for RIFF formats (avi, wav, webp) the bare "RIFF" entry alone is enough.
+ *
+ * @param {Uint8Array|number[]} headerBytes - first bytes of the file
+ * @param {{magicNumbers: {bytes: number[], offset: number}[]}} format - SUPPORTED_FORMATS entry
+ * @returns {boolean}
+ */
+export function matchSignature(headerBytes, format) {
+  return format.magicNumbers.some((signature) => {
+    const offset = signature.offset;
+    const expectedBytes = signature.bytes;
+
+    // Ensure file is large enough for signature
+    if (headerBytes.length < offset + expectedBytes.length) {
+      return false;
+    }
+
+    // Compare bytes
+    return expectedBytes.every((byte, index) => headerBytes[offset + index] === byte);
   });
 }
 
