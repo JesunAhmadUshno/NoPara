@@ -96,7 +96,7 @@ export default function App() {
   useReveal();
   const [sample, setSample] = useState(() => presetSample('mp4-1c'));
   return (
-    <div className="wrap">
+    <div className="wrap"><a className="skip" href="#top">Skip to content</a>
       <MenuBar />
       <div className="glow" aria-hidden="true" />
       <Hero />
@@ -110,14 +110,14 @@ export default function App() {
       <Dock />
       <footer>
         Every number on this page is read from the NoPara repo at build time (<code>src/utils/security.js</code>, <code>src/App.jsx</code>, <code>index.html</code>, <code>README.md</code>), and the file check runs the app’s own <code>validateFile()</code> in your browser. No conversion runs here and no speed figures are shown, because none are recorded.
-      </footer>
+      <nav className="support" aria-label="Support this work"><a href="https://github.com/sponsors/JesunAhmadUshno">Sponsor this work</a><a href="https://github.com/sponsors/JesunAhmadUshno">Donate</a><a href="https://buymeacoffee.com/jesun">Buy Me a Coffee</a><a href="https://calendly.com/jesunahmadushno/30min">Work with me</a></nav></footer>
     </div>
   );
 }
 
 function Hero() {
   return (
-    <header className="card hero window" id="top" data-title="NoPara — README">
+    <header className="card hero window" id="top" data-title="NoPara - README">
       <div className="head">
         <p className="eyebrow">Browser-only media converter · React + ffmpeg.wasm</p>
         <span className="pill good">● Live app on GitHub Pages</span>
@@ -165,7 +165,7 @@ function Validator({ sample, setSample }) {
   };
   const presetValue = PRESETS.some((p) => p.id === sample.id) ? sample.id : '';
   return (
-    <section id="check" className="card window reveal" data-title="validator.app — runs validateFile() live">
+    <section id="check" className="card window reveal" data-title="validator.app - runs validateFile() live">
       <div className="head">
         <div>
           <p className="eyebrow">Live file check</p>
@@ -244,7 +244,7 @@ function Signatures({ sample, setSample }) {
   const hit = new Set();
   own?.magicNumbers.forEach((s) => { if (matchSignature(sample.bytes, { magicNumbers: [s] })) s.bytes.forEach((_, i) => hit.add(s.offset + i)); });
   return (
-    <section id="signatures" className="card window reveal" data-title="signatures.hex — the table the check uses">
+    <section id="signatures" className="card window reveal" data-title="signatures.hex - the table the check uses">
       <p className="eyebrow">Signature explorer</p>
       <h2>{FORMATS.length} signatures decide what gets in. One match is enough.</h2>
       <p className="sub">
@@ -296,7 +296,7 @@ function FFmpegArgs() {
     if (a[i].startsWith('-')) { const val = a[i + 1]?.startsWith('-') || i + 1 === a.length - 1 ? '' : a[i + 1]; pairs.push([a[i], val]); if (val) i++; }
   }
   return (
-    <section id="ffmpeg" className="card window reveal" data-title="ffmpeg-args.sh — buildFFmpegArgs()">
+    <section id="ffmpeg" className="card window reveal" data-title="ffmpeg-args.sh - buildFFmpegArgs()">
       <div className="head">
         <div>
           <p className="eyebrow">Command builder</p>
@@ -317,7 +317,7 @@ function FFmpegArgs() {
         <div style={{ overflowX: 'auto' }}>
           <table>
             <thead><tr><th>Flag</th><th>Value</th><th>Meaning</th></tr></thead>
-            <tbody>{pairs.map(([f, v]) => <tr key={f}><td className="mono">{f}</td><td className="mono">{v || '—'}</td><td>{flagNote[f] ?? ''}</td></tr>)}</tbody>
+            <tbody>{pairs.map(([f, v]) => <tr key={f}><td className="mono">{f}</td><td className="mono">{v || '-'}</td><td>{flagNote[f] ?? ''}</td></tr>)}</tbody>
           </table>
         </div>
         <div className="tiles" style={{ gridTemplateColumns: '1fr 1fr', marginTop: 0 }}>
@@ -348,7 +348,7 @@ function Limits() {
   const W = 460, H = 150, l = 52, r = 16, lo = 3, hi = Math.log10(4 * 1024 ** 3);
   const x = (v) => l + ((Math.log10(v) - lo) / (hi - lo)) * (W - l - r);
   return (
-    <section id="limits" className="card window reveal" data-title="limits.calc — MAX_FILE_SIZES">
+    <section id="limits" className="card window reveal" data-title="limits.calc - MAX_FILE_SIZES">
       <p className="eyebrow">Size-limit calculator</p>
       <h2>Will this file fit? The limits are {fmtBytes(MAX_FILE_SIZES.video)}, {fmtBytes(MAX_FILE_SIZES.audio)} and {fmtBytes(MAX_FILE_SIZES.image)}.</h2>
       <p className="sub">The verdict comes from <code>validateFile()</code> itself, given a valid {ext.toUpperCase()} header and the size you choose. The code’s comment ties the video cap to WebAssembly memory; no memory test in the repo backs the exact figure.</p>
@@ -389,7 +389,7 @@ function Pipeline() {
     ['Blob URL', 'download from memory'],
   ];
   return (
-    <section id="pipeline" className="card window reveal" data-title="pipeline.md — where your file goes">
+    <section id="pipeline" className="card window reveal" data-title="pipeline.md - where your file goes">
       <p className="eyebrow">Privacy architecture</p>
       <h2>The file never leaves the page. One download comes in: the ffmpeg core.</h2>
       <p className="sub">
@@ -426,7 +426,7 @@ function Claims() {
   const pill = { verified: ['good', 'Verified in code'], contradicted: ['bad', 'Contradicted by code'], partly: ['warn', 'Partly true'], unclear: ['warn', 'Unclear'], asserted: ['warn', 'Asserted only'], unmeasured: ['', 'Not measured'], unused: ['warn', 'Unused code'] };
   const tally = rows.reduce((t, r) => ({ ...t, [r.s]: (t[r.s] || 0) + 1 }), {});
   return (
-    <section id="claims" className="card window reveal" data-title="claims.audit — README against the code">
+    <section id="claims" className="card window reveal" data-title="claims.audit - README against the code">
       <p className="eyebrow">Claims audit</p>
       <h2>{rows.length} claims checked: {tally.verified || 0} hold up in code, {(tally.contradicted || 0) + (tally.partly || 0)} don’t fully.</h2>
       <p className="sub">Each status is computed when the page is built, from the source files, so it changes if the code changes. Where the README was wrong, it has been corrected on this branch and the row says so.</p>
@@ -450,7 +450,7 @@ function Receipts() {
     ['docs/research-review.md', 'Engineering review', 'Graded rubric and open gaps'],
   ];
   return (
-    <section id="receipts" className="card window reveal" data-title="receipts — what is and isn’t measured">
+    <section id="receipts" className="card window reveal" data-title="receipts - what is and isn’t measured">
       <p className="eyebrow">Receipts and limits</p>
       <h2>What this page can show, and what nobody has measured yet.</h2>
       <div className="grid2" style={{ marginTop: 16 }}>
