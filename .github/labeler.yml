@@ -1,0 +1,21 @@
+src:
+  - changed-files:
+      - any-glob-to-any-file: ["src/**"]
+public:
+  - changed-files:
+      - any-glob-to-any-file: ["public/**"]
+tests:
+  - changed-files:
+      - any-glob-to-any-file: ["test/**"]
+site:
+  - changed-files:
+      - any-glob-to-any-file: ["site/**"]
+web:
+  - changed-files:
+      - any-glob-to-any-file: ["index.html", "vite.config.js"]
+docs:
+  - changed-files:
+      - any-glob-to-any-file: ["docs/**", "README.md", "ARCHITECTURE.md", "COMPLIANCE.md", "DEPLOYMENT.md"]
+automation:
+  - changed-files:
+      - any-glob-to-any-file: [".github/**"]
